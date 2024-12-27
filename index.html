@@ -50,7 +50,7 @@
             height: 400px;
         }
         h1 {
-            color: #ff6600;
+            color: #004c99;
             text-align: center;
             margin-bottom: 30px;
             display: flex;
@@ -83,17 +83,19 @@
         }
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #ff6600;
-            color: white;
+            padding: 12px;
+            background-color: #004c99;
+            color: #ffffff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
             margin-bottom: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #e65c00;
+            background-color: #0066cc;
         }
         #result {
             margin-top: 20px;
@@ -112,7 +114,7 @@
 <body>
     <div class="calculator">
         <h1>
-            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#ff6600">
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#004c99">
                 <!-- Row 1 -->
                 <rect x="0" y="0" width="30" height="30" />
                 <rect x="35" y="0" width="30" height="30" />
@@ -134,15 +136,18 @@
             <div class="input-section">
                 <div class="input-group">
                     <label for="x">Lengte van de tegel (cm):</label>
-                    <input type="number" id="x" step="1" min="0" placeholder="Bijvoorbeeld: 60" oninput="updateVisualization()">
+                    <input type="number" id="x" step="1" min="0" placeholder="Bijvoorbeeld: 60" 
+                           oninput="updateVisualization()" inputmode="numeric" pattern="[0-9]*">
                 </div>
                 <div class="input-group">
                     <label for="y">Breedte van de tegel (cm):</label>
-                    <input type="number" id="y" step="1" min="0" placeholder="Bijvoorbeeld: 60" oninput="updateVisualization()">
+                    <input type="number" id="y" step="1" min="0" placeholder="Bijvoorbeeld: 60" 
+                           oninput="updateVisualization()" inputmode="numeric" pattern="[0-9]*">
                 </div>
                 <div class="input-group">
                     <label for="m">Totale oppervlakte (m²):</label>
-                    <input type="number" id="m" step="0.01" min="0" placeholder="Bijvoorbeeld: 100" onkeydown="if(event.key === 'Enter') calculateClips()">
+                    <input type="number" id="m" step="0.01" min="0" placeholder="Bijvoorbeeld: 100" 
+                           onkeydown="if(event.key === 'Enter') calculateClips()" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*">
                 </div>
                 <button onclick="calculateClips()">Bereken aantal clips</button>
                 <div id="result"></div>
@@ -195,7 +200,7 @@
                 </defs>
 
                 <rect x="${svgX}" y="${svgY}" width="${scaledWidth}" height="${scaledHeight}" 
-                      fill="#ffffff" stroke="#ffbe00" stroke-width="3"/>
+                      fill="#ffffff" stroke="#004c99" stroke-width="3"/>
                 
                 <line x1="${svgX}" y1="${svgY + scaledHeight + 30}" 
                       x2="${svgX + scaledWidth}" y2="${svgY + scaledHeight + 30}" 
