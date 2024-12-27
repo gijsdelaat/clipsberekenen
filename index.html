@@ -61,6 +61,8 @@
         .logo {
             width: 40px;
             height: 40px;
+            object-fit: contain;
+            filter: brightness(0) saturate(100%) invert(19%) sepia(88%) saturate(2242%) hue-rotate(201deg) brightness(97%) contrast(102%);
         }
         h3 {
             margin: 0;
@@ -114,22 +116,7 @@
 <body>
     <div class="calculator">
         <h1>
-            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#004c99">
-                <!-- Row 1 -->
-                <rect x="0" y="0" width="30" height="30" />
-                <rect x="35" y="0" width="30" height="30" />
-                <rect x="70" y="0" width="30" height="30" />
-
-                <!-- Row 2 -->
-                <rect x="0" y="35" width="30" height="30" />
-                <rect x="35" y="35" width="30" height="30" />
-                <rect x="70" y="35" width="30" height="30" />
-
-                <!-- Row 3 -->
-                <rect x="0" y="70" width="30" height="30" />
-                <rect x="35" y="70" width="30" height="30" />
-                <rect x="70" y="70" width="30" height="30" />
-            </svg>
+            <img src="Untitled_design__5_-removebg-preview.svg" alt="Logo" class="logo">
             Tegelclips Berekenen
         </h1>
         <div class="calculator-grid">
