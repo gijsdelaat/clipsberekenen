@@ -50,9 +50,17 @@
             height: 400px;
         }
         h1 {
-            color: #004c99;
+            color: #ff6600;
             text-align: center;
             margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
         }
         h3 {
             margin: 0;
@@ -103,7 +111,25 @@
 </head>
 <body>
     <div class="calculator">
-        <h1>Tegelclips Berekenen</h1>
+        <h1>
+            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#ff6600">
+                <!-- Row 1 -->
+                <rect x="0" y="0" width="30" height="30" />
+                <rect x="35" y="0" width="30" height="30" />
+                <rect x="70" y="0" width="30" height="30" />
+
+                <!-- Row 2 -->
+                <rect x="0" y="35" width="30" height="30" />
+                <rect x="35" y="35" width="30" height="30" />
+                <rect x="70" y="35" width="30" height="30" />
+
+                <!-- Row 3 -->
+                <rect x="0" y="70" width="30" height="30" />
+                <rect x="35" y="70" width="30" height="30" />
+                <rect x="70" y="70" width="30" height="30" />
+            </svg>
+            Tegelclips Berekenen
+        </h1>
         <div class="calculator-grid">
             <div class="input-section">
                 <div class="input-group">
