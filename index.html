@@ -29,15 +29,23 @@
         }
         .visual-section {
             flex: 1;
-            padding: 20px;
-            background-color: #fff3e6;
+            padding: 10px;
+            background-color: #f8f9fa;
             border-radius: 10px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
         h1 {
             color: #ff6600;
             text-align: center;
             margin-bottom: 30px;
             grid-column: 1 / -1;
+        }
+        h3 {
+            margin: 0;
+            padding: 0;
         }
         .input-group {
             margin-bottom: 20px;
@@ -78,14 +86,7 @@
         }
         .visualization {
             width: 100%;
-            height: auto;
-            margin-top: 20px;
-        }
-        .dimensions {
-            font-size: 14px;
-            color: #666;
-            text-align: center;
-            margin-top: 10px;
+            height: 400px;
         }
     </style>
 </head>
@@ -105,7 +106,7 @@
                 </div>
                 <div class="input-group">
                     <label for="m">Totale oppervlakte (m²):</label>
-                    <input type="number" id="m" step="0.01" min="0">
+                    <input type="number" id="m" step="0.01" min="0" placeholder="Bijvoorbeeld: 100" onkeydown="if(event.key === 'Enter') calculateClips()">
                 </div>
                 <button onclick="calculateClips()">Bereken aantal clips</button>
                 <div id="result"></div>
@@ -115,9 +116,6 @@
                 <svg id="tileVisualization" class="visualization" viewBox="0 0 400 400">
                     <!-- Will be populated by JavaScript -->
                 </svg>
-                <div id="dimensionsText" class="dimensions">
-                    Voer de tegelafmetingen in
-                </div>
             </div>
         </div>
     </div>
@@ -134,25 +132,20 @@
                 svg.innerHTML = `
                     <rect x="100" y="100" width="200" height="200" 
                           fill="#f8f9fa" stroke="#004c99" stroke-width="2" stroke-dasharray="5,5"/>
-                    <text x="200" y="210" text-anchor="middle" fill="#004c99" font-size="16px">
-                        Tegel Preview
-                    </text>
                 `;
-                document.getElementById('dimensionsText').textContent = 'Voer de tegelafmetingen in';
                 return;
             }
             
             // Bereken de schaal voor de visualisatie
             const maxDimension = Math.max(x, y);
-            const scale = 250 / maxDimension; // Increased scale factor
+            const scale = 250 / maxDimension;
             
-            // Bereken nieuwe afmetingen en positie
-            const scaledWidth = x * scale;
-            const scaledLength = y * scale;
+            // Use x for height (length) and y for width
+            const scaledWidth = y * scale;
+            const scaledHeight = x * scale;
             const svgX = (400 - scaledWidth) / 2;
-            const svgY = (400 - scaledLength) / 2;
+            const svgY = (400 - scaledHeight) / 2;
 
-            // Update de SVG inhoud
             svg.innerHTML = `
                 <defs>
                     <marker id="arrowStart" markerWidth="10" markerHeight="10" refX="1" refY="5"
@@ -165,31 +158,28 @@
                     </marker>
                 </defs>
 
-                <rect x="${svgX}" y="${svgY}" width="${scaledWidth}" height="${scaledLength}" 
+                <rect x="${svgX}" y="${svgY}" width="${scaledWidth}" height="${scaledHeight}" 
                       fill="#ffffff" stroke="#ffbe00" stroke-width="3"/>
                 
-                <line x1="${svgX}" y1="${svgY + scaledLength + 30}" 
-                      x2="${svgX + scaledWidth}" y2="${svgY + scaledLength + 30}" 
+                <line x1="${svgX}" y1="${svgY + scaledHeight + 30}" 
+                      x2="${svgX + scaledWidth}" y2="${svgY + scaledHeight + 30}" 
                       stroke="#666" stroke-width="1.5"
                       marker-start="url(#arrowStart)"
                       marker-end="url(#arrowEnd)"/>
                 
                 <line x1="${svgX - 30}" y1="${svgY}" 
-                      x2="${svgX - 30}" y2="${svgY + scaledLength}" 
+                      x2="${svgX - 30}" y2="${svgY + scaledHeight}" 
                       stroke="#666" stroke-width="1.5"
                       marker-start="url(#arrowStart)"
                       marker-end="url(#arrowEnd)"/>
 
-                <text x="${svgX + scaledWidth/2}" y="${svgY + scaledLength + 50}" 
-                      text-anchor="middle" fill="#666" font-size="16px">${x} cm</text>
+                <text x="${svgX + scaledWidth/2}" y="${svgY + scaledHeight + 50}" 
+                      text-anchor="middle" fill="#666" font-size="16px">${y} cm</text>
                 
-                <text x="${svgX - 50}" y="${svgY + scaledLength/2}" 
+                <text x="${svgX - 50}" y="${svgY + scaledHeight/2}" 
                       text-anchor="middle" fill="#666" font-size="16px"
-                      transform="rotate(-90 ${svgX - 50} ${svgY + scaledLength/2})">${y} cm</text>
+                      transform="rotate(-90 ${svgX - 50} ${svgY + scaledHeight/2})">${x} cm</text>
             `;
-
-            document.getElementById('dimensionsText').textContent = 
-                `Afmetingen: ${x} × ${y} cm`;
         }
 
         function calculateClips() {
