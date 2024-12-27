@@ -163,8 +163,8 @@
 
     <script>
         function updateVisualization() {
-            const x = parseInt(document.getElementById('x').value) || 60; // Default to 60 if no input
-            const y = parseInt(document.getElementById('y').value) || 60; // Default to 60 if no input
+            const x = parseInt(document.getElementById('x').value) || 60;
+            const y = parseInt(document.getElementById('y').value) || 60;
 
             const svg = document.getElementById('tileVisualization');
             
@@ -177,15 +177,17 @@
                 return;
             }
             
-            // Bereken de schaal voor de visualisatie
             const maxDimension = Math.max(x, y);
             const scale = 250 / maxDimension;
             
-            // Use x for height (length) and y for width
             const scaledWidth = y * scale;
             const scaledHeight = x * scale;
             const svgX = (400 - scaledWidth) / 2;
             const svgY = (400 - scaledHeight) / 2;
+
+            // Calculate clips per side
+            const clipsX = (x < 29) ? 1 : Math.ceil(x / 30);
+            const clipsY = (y < 29) ? 1 : Math.ceil(y / 30);
 
             svg.innerHTML = `
                 <defs>
@@ -202,6 +204,25 @@
                 <rect x="${svgX}" y="${svgY}" width="${scaledWidth}" height="${scaledHeight}" 
                       fill="#ffffff" stroke="#004c99" stroke-width="3"/>
                 
+                <!-- Clips indicators -->
+                ${Array(clipsY).fill().map((_, i) => {
+                    const spacing = scaledWidth / (clipsY);
+                    const xPos = svgX + spacing * (i + 0.5);
+                    return `
+                        <circle cx="${xPos}" cy="${svgY}" r="4" fill="#004c99"/>
+                        <circle cx="${xPos}" cy="${svgY + scaledHeight}" r="4" fill="#004c99"/>
+                    `;
+                }).join('')}
+                
+                ${Array(clipsX).fill().map((_, i) => {
+                    const spacing = scaledHeight / (clipsX);
+                    const yPos = svgY + spacing * (i + 0.5);
+                    return `
+                        <circle cx="${svgX}" cy="${yPos}" r="4" fill="#004c99"/>
+                        <circle cx="${svgX + scaledWidth}" cy="${yPos}" r="4" fill="#004c99"/>
+                    `;
+                }).join('')}
+
                 <line x1="${svgX}" y1="${svgY + scaledHeight + 30}" 
                       x2="${svgX + scaledWidth}" y2="${svgY + scaledHeight + 30}" 
                       stroke="#666" stroke-width="1.5"
@@ -215,11 +236,11 @@
                       marker-end="url(#arrowEnd)"/>
 
                 <text x="${svgX + scaledWidth/2}" y="${svgY + scaledHeight + 50}" 
-                      text-anchor="middle" fill="#666" font-size="16px">${y} cm</text>
+                      text-anchor="middle" fill="#666" font-size="16px">${y} cm (${clipsY} clips)</text>
                 
                 <text x="${svgX - 50}" y="${svgY + scaledHeight/2}" 
                       text-anchor="middle" fill="#666" font-size="16px"
-                      transform="rotate(-90 ${svgX - 50} ${svgY + scaledHeight/2})">${x} cm</text>
+                      transform="rotate(-90 ${svgX - 50} ${svgY + scaledHeight/2})">${x} cm (${clipsX} clips)</text>
             `;
         }
 
@@ -233,12 +254,12 @@
                 return;
             }
 
-            // Calculate a and b based on the formula
-            let a = (x < 29) ? 1 : Math.ceil(x / 30);
-            let b = (y < 29) ? 1 : Math.ceil(y / 30);
+            // Calculate clips per side
+            const clipsX = (x < 29) ? 1 : Math.ceil(x / 30);
+            const clipsY = (y < 29) ? 1 : Math.ceil(y / 30);
 
-            // Calculate final result using the formula
-            const sonuc = Math.ceil((((a + b) / (x / 100)) / (y / 100)) * m);
+            // Calculate final result
+            const sonuc = Math.ceil((((clipsX + clipsY) / (x / 100)) / (y / 100)) * m);
 
             // Display the result
             const resultDiv = document.getElementById('result');
@@ -246,8 +267,12 @@
             resultDiv.innerHTML = `
                 Voor een oppervlakte van ${m} m²<br>
                 met tegelafmetingen ${x} x ${y} cm<br>
+                <span style="color: #666;">Aantal clips per zijde: ${clipsX} (lengte) en ${clipsY} (breedte)</span><br>
                 heeft u <strong>${sonuc} tegelclips</strong> nodig.
             `;
+
+            // Update visualization to show clips
+            updateVisualization();
         }
 
         // Initialize visualization
