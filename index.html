@@ -60,11 +60,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             width: 100%;
         }
-        @media (min-width: 768px) {
-            .calculator {
-                padding: 30px;
-            }
-        }
         .calculator-grid {
             display: flex;
             flex-direction: column;
@@ -82,9 +77,6 @@
             .visual-section {
                 flex: 1;
             }
-            h1 {
-                margin-bottom: 40px;
-            }
         }
         .input-section {
             width: 100%;
@@ -96,20 +88,23 @@
             border-radius: 10px;
             height: 400px;
         }
-        h1 {
-            color: #004c99;
+        .logo-container {
             text-align: center;
             margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
         }
         .logo {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            filter: brightness(0) saturate(100%) invert(19%) sepia(88%) saturate(2242%) hue-rotate(201deg) brightness(97%) contrast(102%);
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .logo-text {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+            text-align: center;
         }
         h3 {
             margin: 0;
@@ -176,10 +171,10 @@
 </head>
 <body>
     <div class="calculator">
-        <h1>
-            <img src="Untitled_design__5_-removebg-preview.svg" alt="Logo" class="logo">
-            Tegelclips Berekenen
-        </h1>
+        <div class="logo-container">
+            <img src="LogoColorTextBelow.svg" alt="Logo" class="logo">
+            <h1 class="logo-text">Tegelclips Berekenen</h1>
+        </div>
         <div class="calculator-grid">
             <div class="input-section">
                 <div class="input-group">
@@ -237,8 +232,19 @@
             const svgY = (400 - scaledHeight) / 2;
 
             // Calculate clips per side
-            const clipsX = (x < 29) ? 1 : Math.ceil(x / 30);
-            const clipsY = (y < 29) ? 1 : Math.ceil(y / 30);
+            function calculateClipsPerSide(length) {
+                if (length < 25) {
+                    return 1;
+                } else if (length <= 60) {
+                    return 2;
+                } else {
+                    // For lengths > 60cm: 2 clips + 1 extra clip per 30cm above 60cm
+                    return 2 + Math.ceil((length - 60) / 30);
+                }
+            }
+
+            const clipsX = calculateClipsPerSide(x);
+            const clipsY = calculateClipsPerSide(y);
 
             svg.innerHTML = `
                 <defs>
@@ -306,8 +312,19 @@
             }
 
             // Calculate clips per side
-            const clipsX = (x < 29) ? 1 : Math.ceil(x / 30);
-            const clipsY = (y < 29) ? 1 : Math.ceil(y / 30);
+            function calculateClipsPerSide(length) {
+                if (length < 25) {
+                    return 1;
+                } else if (length <= 60) {
+                    return 2;
+                } else {
+                    // For lengths > 60cm: 2 clips + 1 extra clip per 30cm above 60cm
+                    return 2 + Math.ceil((length - 60) / 30);
+                }
+            }
+
+            const clipsX = calculateClipsPerSide(x);
+            const clipsY = calculateClipsPerSide(y);
 
             // Calculate final result
             const sonuc = Math.ceil((((clipsX + clipsY) / (x / 100)) / (y / 100)) * m);
